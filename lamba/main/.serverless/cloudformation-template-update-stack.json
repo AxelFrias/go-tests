@@ -1,0 +1,60 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "HelloWorldLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/axelito-mixxx-go-test-dev-HelloWorld"
+      }
+    },
+    "HelloWorldLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "gbm-boa-serverless-deployments-us-east-1-dev",
+          "S3Key": "mamba/writers/axelito-mixxx-go-test/axelito-mixxx-go-test/dev/1692128737817-2023-08-15T19:45:37.817Z/myFunction.zip"
+        },
+        "Handler": "bootstrap",
+        "Runtime": "provided.al2",
+        "FunctionName": "axelito-mixxx-go-test-dev-HelloWorld",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Architectures": [
+          "arm64"
+        ],
+        "Role": "arn:aws:iam::055587831261:role/GBMAWSMambaLambdaExecutionRole"
+      },
+      "DependsOn": [
+        "HelloWorldLogGroup"
+      ]
+    },
+    "HelloWorldLambdaVersionxLKr5kKfzKF90ErpDPfNTzlNyXARyCNN7KLTdS2CXY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "HelloWorldLambdaFunction"
+        },
+        "CodeSha256": "GVRdVYSn8tEKYnnojvFZR/0TVs0ZLD77px5Z903V5t8="
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": "gbm-boa-serverless-deployments-us-east-1-dev",
+      "Export": {
+        "Name": "sls-axelito-mixxx-go-test-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "HelloWorldLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "HelloWorldLambdaVersionxLKr5kKfzKF90ErpDPfNTzlNyXARyCNN7KLTdS2CXY"
+      },
+      "Export": {
+        "Name": "sls-axelito-mixxx-go-test-dev-HelloWorldLambdaFunctionQualifiedArn"
+      }
+    }
+  }
+}

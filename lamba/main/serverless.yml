@@ -1,0 +1,37 @@
+service: axelito-mixxx-go-test
+frameworkVersion: ^3
+
+provider:
+  name: aws
+  stackName: ${self:custom.stack_name}
+  stage: ${self:custom.stage}
+  runtime: provided.al2
+  iam:
+    role: arn:aws:iam::${self:custom.aws_account_id}:role/GBMAWSMambaLambdaExecutionRole
+    deploymentRole: arn:aws:iam::${self:custom.aws_account_id}:role/GBMAWSCloudFormationExecutionRole
+  stackTags:
+    ProjectName: Mamba
+    Team: BOA
+    ServiceType: Platform
+    Component: Writers
+  deploymentBucket:
+    name: gbm-boa-serverless-deployments-us-east-1-dev
+  deploymentPrefix: mamba/writers/${self:service}
+
+custom:
+  aws_account_id: ${self:custom.config.${self:custom.stage}.aws_account_id}
+  stack_name: ${self:service}-${self:custom.stage}
+  stage: ${opt:stage}
+  config:
+    dev:
+      aws_account_id: '055587831261'
+
+package:
+  individually: true
+
+functions:
+  HelloWorld:
+    package:
+      artifact: myFunction.zip
+    handler: bootstrap
+    architecture: arm64
